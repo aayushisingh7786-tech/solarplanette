@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orrery Engine: Final Edition</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
+        }
+
+        canvas {
+            display: block;
+            touch-action: none;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .panel {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            pointer-events: auto;
+        }
+
+        #controls {
+            top: 20px;
+            left: 20px;
+        }
+
+        #stats {
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .row {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        #resetBtn {
+            background: #822;
+        }
+
+        #shotBtn {
+            background: #228b22;
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 15, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #444;
+            width: 320px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        #modal h2 {
+            margin-top: 0;
+            color: #ffcc00;
+            letter-spacing: 1px;
+        }
+
+        .days-val {
+            font-family: 'Courier New', monospace;
+            color: #00ffcc;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="solarCanvas"></canvas>
+
+    <div id="ui-layer">
+        <div id="controls" class="panel">
+            <div class="row">
+                <button id="pauseBtn">Pause</button>
+                <button id="resetBtn">Reset View</button>
+                <button id="shotBtn">📸 Photo</button>
+            </div>
+            <div class="row">
+                <label style="font-size: 12px;">Warp Speed</label>
+                <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1" style="flex:1">
+            </div>
+            <div style="font-size: 10px; opacity: 0.5; margin-top: 5px;">Scroll to Zoom | Click Planet for Data</div>
+        </div>
+
+        <div id="stats" class="panel">
+            <div style="font-size: 11px; opacity: 0.7; text-transform: uppercase;">Mission Time</div>
+            <div id="dayCounter" class="days-val">0</div>
+            <div style="font-size: 10px;">Earth Days</div>
+        </div>
+    </div>
+
+    <div id="modal">
+        <h2 id="mName"></h2>
+        <p id="mFact" style="line-height: 1.6; font-size: 15px; color: #ddd;"></p>
+        <button onclick="closeModal()"
+            style="width:100%; background:#ffcc00; color:black; font-weight:bold; margin-top:15px;">Return to
+            Bridge</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
