@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orrery Engine: Final Edition</title>
+    <title>Solar System Explorer: Ultimate Edition</title>
     <style>
         body {
             margin: 0;
             background: #000;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             color: white;
         }
 
@@ -19,14 +19,7 @@
             touch-action: none;
         }
 
-        #ui-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            pointer-events: none;
-        }
-
+        /* UI Panels */
         .panel {
             position: absolute;
             background: rgba(0, 0, 0, 0.8);
@@ -35,6 +28,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             pointer-events: auto;
+            z-index: 10;
         }
 
         #controls {
@@ -48,6 +42,21 @@
             text-align: right;
         }
 
+        /* Start Overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
         .row {
             margin-bottom: 10px;
             display: flex;
@@ -58,24 +67,23 @@
         button {
             cursor: pointer;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border-radius: 6px;
-            background: #333;
+            background: #444;
             color: white;
             transition: 0.2s;
-            font-size: 13px;
         }
 
         button:hover {
-            background: #555;
+            background: #666;
         }
 
-        #resetBtn {
-            background: #822;
-        }
-
-        #shotBtn {
-            background: #228b22;
+        #startBtn {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+            padding: 20px 40px;
+            font-size: 1.2em;
         }
 
         #modal {
@@ -91,55 +99,54 @@
             width: 320px;
             text-align: center;
             z-index: 1000;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-        }
-
-        #modal h2 {
-            margin-top: 0;
-            color: #ffcc00;
-            letter-spacing: 1px;
         }
 
         .days-val {
-            font-family: 'Courier New', monospace;
+            font-family: monospace;
             color: #00ffcc;
             font-size: 1.4em;
-            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
+
+    <div id="overlay">
+        <h1>Solar System Engine</h1>
+        <button id="startBtn">ENGAGE ENGINES & AUDIO</button>
+        <p style="margin-top:20px; opacity:0.6;">Use mouse wheel to zoom, click planets to visit</p>
+    </div>
+
     <canvas id="solarCanvas"></canvas>
 
-    <div id="ui-layer">
-        <div id="controls" class="panel">
-            <div class="row">
-                <button id="pauseBtn">Pause</button>
-                <button id="resetBtn">Reset View</button>
-                <button id="shotBtn">📸 Photo</button>
-            </div>
-            <div class="row">
-                <label style="font-size: 12px;">Warp Speed</label>
-                <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1" style="flex:1">
-            </div>
-            <div style="font-size: 10px; opacity: 0.5; margin-top: 5px;">Scroll to Zoom | Click Planet for Data</div>
+    <div id="controls" class="panel">
+        <div class="row">
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn" style="background:#822">Reset</button>
+            <button id="shotBtn" style="background:#228b22">📸 Capture</button>
         </div>
+        <div class="row">
+            <label style="font-size: 12px;">Orbit Speed</label>
+            <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1">
+        </div>
+    </div>
 
-        <div id="stats" class="panel">
-            <div style="font-size: 11px; opacity: 0.7; text-transform: uppercase;">Mission Time</div>
-            <div id="dayCounter" class="days-val">0</div>
-            <div style="font-size: 10px;">Earth Days</div>
-        </div>
+    <div id="stats" class="panel">
+        <div style="font-size: 11px; opacity: 0.7;">EARTH DAYS ELAPSED</div>
+        <div id="dayCounter" class="days-val">0</div>
     </div>
 
     <div id="modal">
-        <h2 id="mName"></h2>
-        <p id="mFact" style="line-height: 1.6; font-size: 15px; color: #ddd;"></p>
+        <h2 id="mName" style="color:#ffcc00"></h2>
+        <p id="mFact" style="line-height: 1.6;"></p>
         <button onclick="closeModal()"
-            style="width:100%; background:#ffcc00; color:black; font-weight:bold; margin-top:15px;">Return to
-            Bridge</button>
+            style="width:100%; background:#ffcc00; color:black; font-weight:bold; padding:10px; border:none; border-radius:5px;">RESUME
+            MISSION</button>
     </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
     <script src="script.js"></script>
 </body>
